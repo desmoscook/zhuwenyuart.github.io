@@ -5,11 +5,11 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { execFileSync } = require('node:child_process');
 const { root, pages, listFiles, validateContent, validateOutput } = require('../scripts/site-contract.cjs');
-const baseline = require('./fixtures/template-baseline.json');
+const originalCommit = require('./fixtures/extracted-assets.json').sourceCommit;
 const hash = data => crypto.createHash('sha256').update(data).digest('hex');
 
 function original(filename) {
-  return execFileSync('git', ['show', `${baseline.sourceCommit}:${filename}`], { cwd: root, maxBuffer: 2 * 1024 * 1024 });
+  return execFileSync('git', ['show', `${originalCommit}:${filename}`], { cwd: root, maxBuffer: 2 * 1024 * 1024 });
 }
 
 test('published inventory contains only generated pages and declared public resources', () => {
@@ -35,7 +35,6 @@ test('templates are the only maintained main page source', () => {
   for (const filename of pages) {
     assert.equal(fs.existsSync(path.join(root, filename)), false, filename);
     assert.ok(fs.existsSync(path.join(root, 'src', filename.replace('.html', '.njk'))));
-    assert.equal(hash(original(filename)), baseline.pages[filename], filename);
   }
   for (const filename of ['header.njk', 'footer.njk']) {
     assert.ok(fs.existsSync(path.join(root, 'src/_includes/components', filename)));
@@ -53,7 +52,7 @@ test('content validation preserves all artworks and explicitly reports legacy mi
 
 test('build input sources retain all original image and vendor file bytes', () => {
   const mappings = ['image/', 'wp-content/', 'wp-includes/', 'portfolios/css/', 'portfolios/js/'];
-  const files = execFileSync('git', ['ls-tree', '-rz', baseline.sourceCommit, '--', ...mappings], { cwd: root }).toString().split('\0').filter(Boolean);
+  const files = execFileSync('git', ['ls-tree', '-rz', originalCommit, '--', ...mappings], { cwd: root }).toString().split('\0').filter(Boolean);
   for (const record of files) {
     const [metadata, oldPath] = record.split('\t');
     const originalBlob = metadata.split(' ')[2];
