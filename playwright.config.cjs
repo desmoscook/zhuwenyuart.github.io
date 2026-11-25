@@ -6,17 +6,8 @@ module.exports = defineConfig({
   fullyParallel: false,
   workers: 1,
   retries: 0,
-  timeout: 60_000,
-  expect: {
-    timeout: 10_000,
-    toHaveScreenshot: {
-      animations: 'disabled',
-      caret: 'hide',
-      scale: 'css',
-      threshold: 0,
-      maxDiffPixels: 0,
-    },
-  },
+  timeout: 30_000,
+  expect: { timeout: 5_000 },
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL: process.env.TEST_BASE_URL || 'http://127.0.0.1:18765',

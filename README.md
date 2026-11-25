@@ -48,7 +48,7 @@ public/wp-content/、wp-includes/   保留原位置的第三方依赖及导出�
 scripts/                          构建、图片验证、CMS 校验、预览
 legacy/                           旧样例，不直接全部发布
 image_origin/                     原始素材，保持原样且不进 dist/
-tests/                            内容、功能、DOM 和视觉测试
+tests/                            少量数据规则与核心操作测试
 docs/                             使用与发布说明
 dist/                             自动生成，不提交、不手改
 ```
@@ -90,37 +90,32 @@ npm run preview
 
 `preview` 只查看已有产物；`dev` 同时监听保存。不要直接用 `file://` 打开作品页，也不要手动编辑 dist。
 
-## 测试
+## 测试：少而稳定，不冻结内容
 
 ```bash
-npx playwright install chromium
-npm run check
+npm test                 # 快速数据／安全规则检查
+npm run test:browser     # 桌面与手机核心操作
+npm run check            # 构建 + 上述两类检查
 ```
 
-- `test:dev-server`：3 项预览服务访问边界检查。
-- `test:structure`：当前作品数据、CMS 范围、图片内容、HTML／资源与发布目录检查，允许正常新增／修改／删除作品。
-- `test:build`：隔离验证 CMS 内容变动、重复构建、失败保护、保存重建和端口冲突。
-- `npm test`：功能、安全输入、失败状态、完整 DOM 对照和 22 张视觉基线。
+第一次运行浏览测试需 `npx playwright install chromium`。
 
-其他命令：
+保留的检查只覆盖容易造成真实故障的契约：数据可增删改且允许空列表、非法路径／损坏图片被拒绝、筛选有效、弹窗对应选中作品、手机菜单可跳转，以及普通文字不执行 HTML。
+
+测试不保存当前作品名单、数量、顺序、年份、分类、文案或图片哈希。业务测试从当前目录取样；异常输入用少量虚构数据，不依赖网站内容。改标题、加作品、换图、新增分类或调整排版无需更新测试。只有有意改变数据规则或核心功能行为时，才需要更新对应测试。
+
+历史 DOM／像素快照、迁移字节证明、分类／断点穷举和反复复制整站构建的测试已移除。既有重构证明可从 Git 历史或旧 PR 查阅，不作为长期发布门槛。样式调整用预览人工确认，不要求维护整页截图基线。
+
+失败时查看报告：
 
 ```bash
-npm run test:browser
-npm run test:visual
-npm run test:media-migration
 npx playwright show-report --host 127.0.0.1 --port 9323
 ```
-
-`test:media-migration` 仅用于本次图片搬迁的字节／元数据证明，不是永久冻结媒体内容。常规 Actions 不运行它。
-
-视觉测试使用固定作品 fixture 和原图片 Git blob；CMS 合法内容更新不会要求改基准图。基线固定 Linux、Playwright 1.65.1 / Chromium 159.0.8154.6、相同替代字体，零像素容差。外部字体、统计、真实手机和其他浏览器仍须独立验证。测试中的大照片 `srcset` 候选固定仅用于消除截图噪声，不修改网站本身行为。
-
-不要直接更新截图让失败通过。DOM 对照允许本轮明确的媒体路径迁移与新增数据契约脚本，除此之外仍对照既有模板结构。
 
 ## Actions 与发布
 
 `.github/workflows/site.yml` 继续按 main 变动构建、检查并发布。原站已切换到 Actions 并完成过首次部署；本轮不修改平台设置。部署仍受原仓库／main／非 PR／`ENABLE_PAGES_DEPLOY=true` 条件保护。
 
-CI 运行长期内容、功能和 DOM 检查；字体环境相关截图在固定开发环境运行。检查失败不发布，上一版正式站保留。
+CI 使用相同的轻量流程：构建时校验当前内容，运行快速规则测试，再做核心桌面／手机冒烟检查。没有历史 DOM／像素冻结或旧提交依赖。检查失败不发布，上一版正式站保留。
 
 详见 [部署说明](docs/deployment.md)、[预览与源码结构](docs/preview-and-structure.md)、[CMS 与图片](docs/cms-and-media.md)。

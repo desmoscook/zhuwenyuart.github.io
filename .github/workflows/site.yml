@@ -19,10 +19,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - name: Check out source and migration baseline history
+      - name: Check out source
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
-        with:
-          fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
@@ -32,14 +30,11 @@ jobs:
         run: npm ci
       - name: Build the publish directory
         run: npm run build
-      - name: Check development server and generated structure
-        run: npm run test:dev-server && npm run test:structure && npm run test:build
+      - name: Check essential content and safety rules
+        run: npm test
       - name: Install test browser
         run: npx playwright install --with-deps chromium
-      - name: Test behavior, resource loads and rendered DOM
-        # Pixel baselines use the author's fixed Linux font environment.
-        # They must be checked locally with npm test, not silently regenerated
-        # under a different CI font stack.
+      - name: Smoke-test core desktop and mobile interactions
         run: npm run test:browser
       - name: Save browser report
         if: always()
