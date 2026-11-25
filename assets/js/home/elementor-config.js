@@ -1,0 +1,126 @@
+
+		var elementorFrontendConfig = {
+			"environmentMode": {
+				"edit": false,
+				"wpPreview": false,
+				"isScriptDebug": false
+			},
+			"i18n": {
+				"shareOnFacebook": "在脸书上分享",
+				"shareOnTwitter": "分享到Twitter",
+				"pinIt": "钉住",
+				"download": "下载",
+				"downloadImage": "下载图片",
+				"fullscreen": "全屏",
+				"zoom": "缩放",
+				"share": "分享",
+				"playVideo": "播放视频",
+				"previous": "上一页",
+				"next": "下一页",
+				"close": "关闭",
+				"a11yCarouselPrevSlideMessage": "上一张幻灯片",
+				"a11yCarouselNextSlideMessage": "下一张幻灯片",
+				"a11yCarouselFirstSlideMessage": "这是第一张幻灯片",
+				"a11yCarouselLastSlideMessage": "这是最后一张幻灯片",
+				"a11yCarouselPaginationBulletMessage": "转到幻灯片"
+			},
+			"is_rtl": false,
+			"breakpoints": {
+				"xs": 0,
+				"sm": 480,
+				"md": 768,
+				"lg": 1025,
+				"xl": 1440,
+				"xxl": 1600
+			},
+			"responsive": {
+				"breakpoints": {
+					"mobile": {
+						"label": "手机纵向",
+						"value": 767,
+						"default_value": 767,
+						"direction": "max",
+						"is_enabled": true
+					},
+					"mobile_extra": {
+						"label": "手机横向",
+						"value": 880,
+						"default_value": 880,
+						"direction": "max",
+						"is_enabled": false
+					},
+					"tablet": {
+						"label": "平板电脑纵向",
+						"value": 1024,
+						"default_value": 1024,
+						"direction": "max",
+						"is_enabled": true
+					},
+					"tablet_extra": {
+						"label": "平板电脑横向",
+						"value": 1200,
+						"default_value": 1200,
+						"direction": "max",
+						"is_enabled": false
+					},
+					"laptop": {
+						"label": "笔记本电脑",
+						"value": 1366,
+						"default_value": 1366,
+						"direction": "max",
+						"is_enabled": false
+					},
+					"widescreen": {
+						"label": "全宽屏",
+						"value": 2400,
+						"default_value": 2400,
+						"direction": "min",
+						"is_enabled": false
+					}
+				},
+				"hasCustomBreakpoints": false
+			},
+			"version": "3.28.3",
+			"is_static": false,
+			"experimentalFeatures": {
+				"e_font_icon_svg": true,
+				"additional_custom_breakpoints": true,
+				"container": true,
+				"e_local_google_fonts": true,
+				"nested-elements": true,
+				"editor_v2": true,
+				"e_element_cache": true,
+				"home_screen": true,
+				"launchpad-checklist": true
+			},
+			"urls": {
+				"assets": "\/wp-content\/plugins\/elementor\/assets\/",
+				"ajaxurl": "\/wp-admin\/admin-ajax.php",
+				"uploadUrl": "\/wp-content\/uploads"
+			},
+			"nonces": {
+				"floatingButtonsClickTracking": "7caa86c9f2"
+			},
+			"swiperClass": "swiper",
+			"settings": {
+				"page": [],
+				"editorPreferences": []
+			},
+			"kit": {
+				"active_breakpoints": ["viewport_mobile", "viewport_tablet"],
+				"global_image_lightbox": "yes",
+				"lightbox_enable_counter": "yes",
+				"lightbox_enable_fullscreen": "yes",
+				"lightbox_enable_zoom": "yes",
+				"lightbox_enable_share": "yes",
+				"lightbox_title_src": "title",
+				"lightbox_description_src": "description"
+			},
+			"post": {
+				"id": 616,
+				"title": "Portfolio",
+				"excerpt": "",
+				"featuredImage": false
+			}
+		};
+	
