@@ -17,11 +17,12 @@ for (const filename of Object.keys(manifest.pages)) {
     });
     if (url === '/portfolios/') await openGallery(page);
     else await openPage(page, url);
-    // IE-only conditional comments stay comments in Chromium. Their extracted
-    // asset is checked on disk by structure.test.cjs, not executed by this browser.
-    const expected = manifest.pages[filename].blocks
-      .filter(block => block.originalId !== 'astra-flexibility-js-after')
-      .map(block => '/' + block.asset);
+    const expected = [];
+    for (const block of manifest.pages[filename].blocks) {
+      if (block.originalId === 'astra-flexibility-js-after') continue;
+      if (block.asset === 'assets/js/portfolio/gallery.js') expected.push('/assets/js/portfolio/artwork-data.js');
+      expected.push('/' + block.asset);
+    }
     const activeReferences = await page.locator('script[src^="/assets/"], link[href^="/assets/"]')
       .evaluateAll(nodes => nodes.map(node => node.getAttribute('src') || node.getAttribute('href')));
     expect(activeReferences).toEqual(expected);

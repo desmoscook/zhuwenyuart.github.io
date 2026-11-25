@@ -37,14 +37,14 @@ async function freePort() {
   return port;
 }
 
-test('isolated builds are repeatable, failed builds retain output, and saving a template rebuilds it', { timeout: 60_000 }, async () => {
+test('isolated builds accept CMS edits and preserve last output on failures, watch changes and occupied ports', { timeout: 120_000 }, async () => {
   const directory = fs.mkdtempSync(path.join(source, '.build-lifecycle-'));
   let dev;
   try {
     for (const name of ['src', 'public', 'content', 'legacy', 'scripts']) {
       fs.cpSync(path.join(source, name), path.join(directory, name), { recursive: true });
     }
-    for (const name of ['package.json', 'eleventy.config.cjs']) fs.copyFileSync(path.join(source, name), path.join(directory, name));
+    for (const name of ['package.json', 'eleventy.config.cjs', '.pages.yml']) fs.copyFileSync(path.join(source, name), path.join(directory, name));
     fs.symlinkSync(path.join(source, 'node_modules'), path.join(directory, 'node_modules'), 'dir');
     const first = await runBuild(directory);
     assert.equal(first.code, 0, first.output);
@@ -55,6 +55,25 @@ test('isolated builds are repeatable, failed builds retain output, and saving a 
     assert.equal(second.code, 0, second.output);
     assert.equal(hash(html), firstHash);
     assert.equal(fs.existsSync(path.join(directory, 'dist/stale.txt')), false);
+    const artworkPath = path.join(directory, 'content/artwork.json');
+    const originalCatalog = JSON.parse(fs.readFileSync(artworkPath, 'utf8'));
+    const beforeCatalog = JSON.stringify(originalCatalog);
+    const insertedPath = '/media/artworks/cms-insertion-probe.jpg';
+    fs.copyFileSync(path.join(directory, 'public', originalCatalog[0].path.slice(1)), path.join(directory, 'public', insertedPath.slice(1)));
+    const updatedCatalog = originalCatalog.map((art, index) => index ? art : { ...art, name: art.name + ' 已编辑' });
+    updatedCatalog.push({ ...originalCatalog[0], name: '新增作品', path: insertedPath, time: '2030', category: '新 系列 [x:y]' });
+    fs.writeFileSync(artworkPath, JSON.stringify(updatedCatalog));
+    const inserted = await runBuild(directory);
+    assert.equal(inserted.code, 0, inserted.output);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(directory, 'dist/artwork.json'), 'utf8')).length, originalCatalog.length + 1);
+    updatedCatalog.splice(0, 1);
+    fs.writeFileSync(artworkPath, JSON.stringify(updatedCatalog));
+    const removed = await runBuild(directory);
+    assert.equal(removed.code, 0, removed.output);
+    fs.writeFileSync(artworkPath, beforeCatalog);
+    fs.unlinkSync(path.join(directory, 'public', insertedPath.slice(1)));
+    const restored = await runBuild(directory);
+    assert.equal(restored.code, 0, restored.output);
     const template = path.join(directory, 'src/index.njk');
     const original = fs.readFileSync(template, 'utf8');
     fs.writeFileSync(template, original + '\n{% if %}');

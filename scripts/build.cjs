@@ -2,9 +2,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { root, validateContent, validateOutput } = require('./site-contract.cjs');
+const { validateCmsConfig } = require('./cms-config.cjs');
 
 async function buildSite() {
-  const content = validateContent();
+  validateCmsConfig(root);
+  const content = await validateContent();
   const staging = fs.mkdtempSync(path.join(root, '.build-'));
   const output = path.join(root, 'dist');
   const backup = path.join(staging, '.previous-output');

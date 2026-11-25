@@ -28,10 +28,11 @@ test('preview serves four pages, data, CSS, JavaScript and Unicode image paths',
     }
     const data = await fetch(baseURL + '/artwork.json');
     const artworks = await data.json();
-    assert.equal(artworks.length, 52);
-    const image = await fetch(baseURL + '/' + artworks[0].path);
+    const expectedArtworks = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'content', 'artwork.json'), 'utf8'));
+    assert.deepEqual(artworks, expectedArtworks);
+    const image = await fetch(baseURL + (artworks[0]?.path || '/media/site/home/010acfc535210d03f216c077fece751.jpg'));
     assert.equal(image.status, 200);
-    assert.equal(image.headers.get('content-type'), 'image/jpeg');
+    assert.match(image.headers.get('content-type'), /^image\//);
     const css = await fetch(baseURL + '/assets/css/shared/astra-theme.css');
     assert.equal(css.status, 200);
     assert.match(css.headers.get('content-type'), /text\/css/);

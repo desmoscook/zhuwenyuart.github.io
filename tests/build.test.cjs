@@ -3,26 +3,22 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { execFileSync } = require('node:child_process');
 const { root, pages, listFiles, validateContent, validateOutput } = require('../scripts/site-contract.cjs');
-const originalCommit = require('./fixtures/extracted-assets.json').sourceCommit;
+const { validateArtworks } = require('../src/assets/js/portfolio/artwork-data.js');
+const { validateCmsConfig } = require('../scripts/cms-config.cjs');
 const hash = data => crypto.createHash('sha256').update(data).digest('hex');
 
-function original(filename) {
-  return execFileSync('git', ['show', `${originalCommit}:${filename}`], { cwd: root, maxBuffer: 2 * 1024 * 1024 });
-}
-
-test('published inventory contains only generated pages and declared public resources', () => {
+test('published inventory contains only pages and declared public resources', () => {
   const result = validateOutput(path.join(root, 'dist'));
   assert.equal(result.pages, 5);
-  for (const excluded of ['src', 'content', 'tests', 'scripts', 'legacy', 'node_modules', 'image_origin', '.git']) {
+  for (const excluded of ['src', 'content', 'tests', 'scripts', 'legacy', 'node_modules', 'image_origin', '.git', '.pages.yml']) {
     assert.equal(fs.existsSync(path.join(root, 'dist', excluded)), false, excluded);
   }
   assert.deepEqual(fs.readFileSync(path.join(root, 'dist/artwork.json')), fs.readFileSync(path.join(root, 'content/artwork.json')));
   assert.deepEqual(fs.readFileSync(path.join(root, 'dist/CNAME')), fs.readFileSync(path.join(root, 'public/CNAME')));
 });
 
-test('each public input is copied byte-for-byte to the same public URL', () => {
+test('each public input is copied byte-for-byte', () => {
   for (const file of listFiles(path.join(root, 'public'))) {
     assert.equal(hash(fs.readFileSync(path.join(root, 'public', file))), hash(fs.readFileSync(path.join(root, 'dist', file))), file);
   }
@@ -31,35 +27,29 @@ test('each public input is copied byte-for-byte to the same public URL', () => {
   }
 });
 
-test('templates are the only maintained main page source', () => {
+test('templates and organized media are the only maintained sources', () => {
   for (const filename of pages) {
     assert.equal(fs.existsSync(path.join(root, filename)), false, filename);
     assert.ok(fs.existsSync(path.join(root, 'src', filename.replace('.html', '.njk'))));
   }
-  for (const filename of ['header.njk', 'footer.njk']) {
-    assert.ok(fs.existsSync(path.join(root, 'src/_includes/components', filename)));
-  }
+  for (const filename of ['header.njk', 'footer.njk']) assert.ok(fs.existsSync(path.join(root, 'src/_includes/components', filename)));
   assert.equal(fs.existsSync(path.join(root, 'artwork.json')), false);
-  assert.equal(fs.existsSync(path.join(root, 'image')), false);
+  assert.equal(fs.existsSync(path.join(root, 'public/image')), false);
+  assert.ok(fs.existsSync(path.join(root, 'public/media/artworks')));
+  assert.ok(fs.existsSync(path.join(root, 'public/media/site')));
+  assert.ok(fs.existsSync(path.join(root, 'public/media/brand')));
 });
 
-test('content validation preserves all artworks and explicitly reports legacy missing detail paths', () => {
-  const result = validateContent();
-  assert.equal(result.artworks, 52);
-  assert.equal(result.missingDetails.length, 12);
-  assert.deepEqual(fs.readFileSync(path.join(root, 'content/artwork.json')), original('artwork.json'));
+test('content validation permits current records and preserves declared legacy exceptions only', async () => {
+  const result = await validateContent();
+  const current = validateArtworks(JSON.parse(fs.readFileSync(path.join(root, 'content/artwork.json'), 'utf8')));
+  assert.equal(result.artworks, current.length);
+  const exceptions = require('../content/legacy-missing-details.json');
+  for (const missing of result.missingDetails) assert.ok(exceptions.includes(missing));
 });
 
-test('build input sources retain all original image and vendor file bytes', () => {
-  const mappings = ['image/', 'wp-content/', 'wp-includes/', 'portfolios/css/', 'portfolios/js/'];
-  const files = execFileSync('git', ['ls-tree', '-rz', originalCommit, '--', ...mappings], { cwd: root }).toString().split('\0').filter(Boolean);
-  for (const record of files) {
-    const [metadata, oldPath] = record.split('\t');
-    const originalBlob = metadata.split(' ')[2];
-    const source = path.join(root, 'public', oldPath);
-    assert.ok(fs.existsSync(source), oldPath);
-    const bytes = fs.readFileSync(source);
-    const blob = crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
-    assert.equal(blob, originalBlob, oldPath);
-  }
+test('CMS exposes artworks only and preserves the full existing record shape', () => {
+  const config = validateCmsConfig(root);
+  assert.deepEqual(config.media.map(media => media.input), ['public/media/artworks']);
+  assert.deepEqual(config.content.map(entry => entry.path), ['content/artwork.json']);
 });

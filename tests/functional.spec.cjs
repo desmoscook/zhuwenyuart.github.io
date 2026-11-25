@@ -1,4 +1,4 @@
-const { test, expect, artworks, openPage, openGallery, expectNames, settle } = require('./helpers.cjs');
+const { test, expect, artworks, openPage, openGallery, expectNames, settle, selectFilter } = require('./helpers.cjs');
 
 const pages = [
   { url: '/', title: 'Home' },
@@ -43,7 +43,8 @@ test('desktop: every series, year and filter reset preserves artwork order', asy
 
 test('modal: correct artwork and all three existing close methods', async ({ page }) => {
   await openGallery(page);
-  const category = '七宗罪';
+  test.skip(!artworks.length, 'Current catalog is intentionally empty');
+  const category = artworks[0].category;
   await page.locator('.pc-filter .category-group').getByRole('button', { name: category, exact: true }).click();
   await expectNames(page, art => art.category === category);
   const art = artworks.find(art => art.category === category);
@@ -53,7 +54,7 @@ test('modal: correct artwork and all three existing close methods', async ({ pag
     await card.click();
     await expect(modal).toBeVisible();
     await expect(modal.locator('.artwork-title')).toHaveText(art.name);
-    await expect(modal.locator('.modal-image')).toHaveAttribute('src', `../${art.path}`);
+    await expect(modal.locator('.modal-image')).toHaveAttribute('src', art.path);
     await expect(modal.locator('.artwork-time')).toContainText(art.time);
     await expect(modal.locator('.artwork-material')).toContainText(art.material);
     await expect(modal.locator('.artwork-size')).toContainText(art.size);
@@ -71,13 +72,13 @@ test('mobile: all dropdown filters and mobile navigation', async ({ page }) => {
   await expect(page.locator('.mobile-filter')).toBeVisible();
   await expect(page.locator('.pc-filter')).toBeHidden();
   for (const category of new Set(artworks.map(art => art.category))) {
-    await page.locator('.mobile-filter .category-group select').selectOption(`.category-${category}`);
+    await selectFilter(page, 'category', category);
     await expectNames(page, art => art.category === category);
   }
   await page.locator('.filter-slider').click();
   await expectNames(page);
   for (const year of new Set(artworks.map(art => art.time))) {
-    await page.locator('.mobile-filter .time-group select').selectOption(`.time-${year}`);
+    await selectFilter(page, 'time', year);
     await expectNames(page, art => art.time === year);
   }
   const toggle = page.locator('#ast-mobile-header .menu-toggle');

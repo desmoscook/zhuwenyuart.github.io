@@ -2,6 +2,23 @@ const { test, expect } = require('./helpers.cjs');
 const fs = require('node:fs');
 const path = require('node:path');
 const baseline = require('./fixtures/template-dom.json');
+const migration = require('../scripts/media-migration.json');
+const replacements = migration.files.map(file => ['/' + file.from, '/' + file.to]);
+// Pre-existing typo in a small about-photo srcset candidate; this migration
+// updates it to the existing, moved file. No image bytes or layout are changed.
+replacements.push(['/wp-content/uploads/2025/04/zwy_-225x300.jpg', '/media/site/about/zwy_work-225x300.jpg']);
+function migratedToken(value) {
+  if (typeof value === 'string') {
+    return replacements.reduce((text, [before, after]) => text.split(before).join(after), value);
+  }
+  if (!Array.isArray(value)) return value;
+  const result = value.map(migratedToken);
+  if (typeof result[0] === 'string' && Array.isArray(result[2]) && result[2].some(child => child?.[0] === 'script' && child[1]?.some(([name, val]) => name === 'src' && val === '/assets/js/portfolio/gallery.js'))) {
+    const index = result[2].findIndex(child => child?.[0] === 'script' && child[1]?.some(([name, val]) => name === 'src' && val === '/assets/js/portfolio/gallery.js'));
+    result[2].splice(index, 0, ['script', [['src', '/assets/js/portfolio/artwork-data.js']], []]);
+  }
+  return result;
+}
 
 for (const filename of Object.keys(baseline.pages)) {
   test(`generated DOM matches the first refactor: ${filename}`, async ({ page }) => {
@@ -21,6 +38,6 @@ for (const filename of Object.keys(baseline.pages)) {
       }
       return visit(document.documentElement);
     }, after);
-    expect(tokens).toEqual(baseline.pages[filename]);
+    expect(tokens).toEqual(migratedToken(baseline.pages[filename]));
   });
 }

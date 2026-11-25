@@ -64,7 +64,10 @@ src/
 └── assets/{css,js}/
 content/artwork.json
 public/
-├── image/
+├── media/
+│   ├── artworks/                  CMS 唯一图片媒体区
+│   ├── site/{home,about}/          手工维护网站配图
+│   └── brand/                     手工维护品牌图片
 ├── portfolios/{css,js}/
 ├── portfolios/{style.css,mine_style.css}
 ├── wp-content/
@@ -97,11 +100,11 @@ dist/
 
 ### 内容与图片
 
-- `content/artwork.json` 是唯一作品目录源，复制为 `dist/artwork.json`。
-- `public/image/` 是展示图源，复制为 `dist/image/`。
-- 原对外路径不变，因此网页 `../artwork.json`、`../image/...` 请求保持。
-- 图片与原数据均未改动；新增数据验证只限制既有必填字段、年份、路径和主图存在性。
-- 12 个旧可选细节图路径仍缺失，构建提示但保留数据，不在这一轮强行删作品资料。
+- `content/artwork.json` 是唯一作品目录源，复制为 `dist/artwork.json`，现在已配置为 CMS 唯一内容入口。
+- `public/media/artworks/` 是作品图源，复制为 `dist/media/artworks/`；数据记录 `/media/artworks/...`，前端不再拼接 `../` 图片路径。
+- 非作品图在 `public/media/site/` 和 `public/media/brand/`，用同一 Git 存储／构建方式，但不交给 CMS。
+- 图片迁移字节不变，页面 URL 不变，旧图片站外直链不自动重定向；CMS 上传格式与路径需真实回读验证。
+- 12 个旧可选细节图路径明确登记为缺失例外，构建提示但保留数据；新增缺图和无效图片会阻止发布。
 - 原图留在 `image_origin/` 且排除构建，不等于从公开 GitHub 仓库历史中隐藏原图。
 
 ### 发布产物
@@ -112,6 +115,6 @@ dist/
 
 ## 继续小步重构的边界
 
-本轮是 Eleventy 模板、源码目录和构建发布边界，不是视觉重设计、依赖升级或 CMS 接入。首轮源码约束的比较方式从 HTML 原始字符串升级为浏览器完整 DOM 对照；实际元素、属性、文字、CSS/JS 字节和原截图仍保持不变。
+本轮接入作品 CMS 并统一自有图片目录，不开放非作品内容编辑，也不升级第三方依赖或重新设计外观。迁移约束已转为长期内容检查，原截图用固定作品 fixture 保留；媒体目录调整与数据契约脚本通过显式映射与安全输入测试验证。
 
-参见 [发布切换说明](deployment.md)。
+参见 [CMS 与图片说明](cms-and-media.md) 和 [部署说明](deployment.md)。
