@@ -5,19 +5,17 @@
     "dev": "node scripts/dev.cjs",
     "build": "node scripts/build.cjs",
     "preview": "node scripts/dev-server.cjs",
-    "test": "playwright test",
-    "test:browser": "playwright test tests/functional.spec.cjs tests/assets.spec.cjs tests/templates.spec.cjs",
-    "test:dev-server": "node --test tests/dev-server.test.cjs",
-    "test:structure": "node --test tests/structure.test.cjs tests/build.test.cjs",
-    "test:build": "node --test tests/build-lifecycle.test.cjs",
-    "check": "npm run build && npm run test:dev-server && npm run test:structure && npm run test:build && npm test",
-    "test:visual": "playwright test tests/visual.spec.cjs"
+    "test": "node --test tests/content.test.cjs",
+    "test:browser": "playwright test",
+    "check": "npm run build && npm test && npm run test:browser"
   },
   "engines": {
     "node": ">=22"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.8",
-    "@playwright/test": "1.65.1"
+    "@playwright/test": "1.65.1",
+    "js-yaml": "4.3.2",
+    "sharp": "0.35.5"
   }
 }

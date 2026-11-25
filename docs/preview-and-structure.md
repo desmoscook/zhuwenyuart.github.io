@@ -41,9 +41,9 @@ npm run dev -- --host 0.0.0.0 --port 8001
 | `npm run dev` | 初次构建、监听、重建、预览；浏览器手动刷新 |
 | `npm run build` | 在临时目录校验和构建，通过后替换 `dist/` |
 | `npm run preview` | 查看上次成功的 `dist/`，不监听源码 |
-| `npm run check` | 构建、Node 检查、完整功能／DOM／截图检查 |
-| `npm run test:browser` | 无像素检查的浏览器功能与 DOM 测试 |
-| `npm run test:visual` | 22 张固定环境下的严格截图对比 |
+| `npm run check` | 构建当前内容、快速规则检查与核心桌面／手机冒烟测试 |
+| `npm test` | 少量数据与安全规则测试，不读取历史作品快照 |
+| `npm run test:browser` | 抽样检查筛选、弹窗、手机导航与安全文字渲染 |
 
 自动测试使用 `18765`，手动预览使用 `8001`，不会抢同一个端口。`8000` 是远程其他项目的端口，不应覆盖。
 
@@ -64,7 +64,10 @@ src/
 └── assets/{css,js}/
 content/artwork.json
 public/
-├── image/
+├── media/
+│   ├── artworks/                  CMS 唯一图片媒体区
+│   ├── site/{home,about}/          手工维护网站配图
+│   └── brand/                     手工维护品牌图片
 ├── portfolios/{css,js}/
 ├── portfolios/{style.css,mine_style.css}
 ├── wp-content/
@@ -97,11 +100,11 @@ dist/
 
 ### 内容与图片
 
-- `content/artwork.json` 是唯一作品目录源，复制为 `dist/artwork.json`。
-- `public/image/` 是展示图源，复制为 `dist/image/`。
-- 原对外路径不变，因此网页 `../artwork.json`、`../image/...` 请求保持。
-- 图片与原数据均未改动；新增数据验证只限制既有必填字段、年份、路径和主图存在性。
-- 12 个旧可选细节图路径仍缺失，构建提示但保留数据，不在这一轮强行删作品资料。
+- `content/artwork.json` 是唯一作品目录源，复制为 `dist/artwork.json`，现在已配置为 CMS 唯一内容入口。
+- `public/media/artworks/` 是作品图源，复制为 `dist/media/artworks/`；数据记录 `/media/artworks/...`，前端不再拼接 `../` 图片路径。
+- 非作品图在 `public/media/site/` 和 `public/media/brand/`，用同一 Git 存储／构建方式，但不交给 CMS。
+- 图片迁移字节不变，页面 URL 不变，旧图片站外直链不自动重定向；CMS 上传格式与路径需真实回读验证。
+- 12 个旧可选细节图路径明确登记为缺失例外，构建提示但保留数据；新增缺图和无效图片会阻止发布。
 - 原图留在 `image_origin/` 且排除构建，不等于从公开 GitHub 仓库历史中隐藏原图。
 
 ### 发布产物
@@ -112,6 +115,6 @@ dist/
 
 ## 继续小步重构的边界
 
-本轮是 Eleventy 模板、源码目录和构建发布边界，不是视觉重设计、依赖升级或 CMS 接入。首轮源码约束的比较方式从 HTML 原始字符串升级为浏览器完整 DOM 对照；实际元素、属性、文字、CSS/JS 字节和原截图仍保持不变。
+本轮接入作品 CMS 并统一自有图片目录，不开放非作品内容编辑，也不升级第三方依赖或重新设计外观。测试已精简为数据契约与核心操作，不依赖历史截图、DOM、作品数量、文案或顺序；正常内容更新无需改测试。视觉变化在预览中人工确认。
 
-参见 [发布切换说明](deployment.md)。
+参见 [CMS 与图片说明](cms-and-media.md) 和 [部署说明](deployment.md)。

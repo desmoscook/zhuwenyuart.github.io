@@ -5,7 +5,7 @@ const { pipeline } = require('node:stream');
 const { parseArgs } = require('node:util');
 
 const siteDirectories = new Set([
-  'about', 'assets', 'contact', 'image', 'portfolios',
+  'about', 'assets', 'contact', 'media', 'portfolios',
   'single_portfolio', 'wp-content', 'wp-includes',
 ]);
 const siteFiles = new Set(['index.html', 'artwork.json']);
@@ -28,9 +28,10 @@ const types = {
 };
 
 function publicPath(segments) {
-  return !segments.some(segment => segment.startsWith('.')) &&
-    (!segments.length || siteDirectories.has(segments[0]) ||
-      (segments.length === 1 && siteFiles.has(segments[0])));
+  if (segments.includes('..') || segments.some(segment => segment.startsWith('.')) ||
+      (segments[0] === 'media' && !['artworks', 'site', 'brand'].includes(segments[1]))) return false;
+  return !segments.length || siteDirectories.has(segments[0]) ||
+    (segments.length === 1 && siteFiles.has(segments[0]));
 }
 
 function inside(root, filename) {

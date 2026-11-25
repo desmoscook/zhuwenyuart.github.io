@@ -1,5 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { validateArtworkContent } = require('./artwork-validation.cjs');
+const legacyMissingDetails = require('../content/legacy-missing-details.json');
 
 const root = path.resolve(__dirname, '..');
 const pages = ['index.html', 'about/index.html', 'contact/index.html', 'portfolios/index.html'];
@@ -21,44 +23,14 @@ function expectedPublishFiles() {
   ].sort();
 }
 
-// Validate only established invariants here. Legacy optional detail paths are
-// recorded as warnings, not deleted or silently published with changed data.
-function validateContent() {
-  const artworks = JSON.parse(fs.readFileSync(path.join(root, 'content/artwork.json'), 'utf8'));
-  const publicRoot = fs.realpathSync(path.join(root, 'public'));
-  function imagePath(value) {
-    if (!value.startsWith('image/') || value.includes('..') || value.includes('\\') || value.includes('\0')) {
-      throw new Error(`Invalid image path: ${value}`);
-    }
-    return path.join(publicRoot, value);
-  }
-  if (!Array.isArray(artworks)) throw new Error('artwork.json must contain a top-level array');
-  const required = ['path', 'name', 'time', 'category', 'material', 'size', 'des'];
-  const seen = new Set();
-  const missingDetails = [];
-  for (const artwork of artworks) {
-    for (const key of required) {
-      if (typeof artwork[key] !== 'string' || (key !== 'des' && !artwork[key].trim())) {
-        throw new Error(`Invalid artwork ${key}: ${artwork.name || '(unnamed)'}`);
-      }
-    }
-    if (!/^\d{4}$/.test(artwork.time)) throw new Error(`Invalid year: ${artwork.name}`);
-    const primary = fs.realpathSync(imagePath(artwork.path));
-    if (!primary.startsWith(publicRoot + path.sep) || !fs.statSync(primary).isFile()) {
-      throw new Error(`Missing or non-public image: ${artwork.path}`);
-    }
-    if (seen.has(artwork.path)) throw new Error(`Duplicate image record: ${artwork.path}`);
-    seen.add(artwork.path);
-    if (artwork.detail !== undefined) {
-      if (!Array.isArray(artwork.detail) || artwork.detail.some(value => typeof value !== 'string')) {
-        throw new Error(`detail must be a list of image paths: ${artwork.name}`);
-      }
-      for (const detail of artwork.detail) {
-        if (!fs.existsSync(imagePath(detail))) missingDetails.push(detail);
-      }
-    }
-  }
-  return { artworks: artworks.length, missingDetails };
+// Regular content validation permits editing, insertion, deletion and an empty
+// gallery. Only explicitly recorded legacy missing detail paths are tolerated.
+async function validateContent() {
+  return validateArtworkContent({
+    projectRoot: root,
+    artworks: JSON.parse(fs.readFileSync(path.join(root, 'content/artwork.json'), 'utf8')),
+    legacyMissingDetails,
+  });
 }
 
 function validateOutput(directory) {

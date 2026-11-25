@@ -1,7 +1,9 @@
 const fs = require('node:fs');
+const { validateCmsConfig } = require('./scripts/cms-config.cjs');
 
 /** @param {import('@11ty/eleventy/UserConfig').default} eleventyConfig */
 module.exports = function (eleventyConfig) {
+  validateCmsConfig(__dirname);
   eleventyConfig.setNunjucksEnvironmentOptions({
     autoescape: true,
     throwOnUndefined: true,

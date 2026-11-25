@@ -1,8 +1,10 @@
 # 朱文语艺术作品网站
 
-多页面静态作品集。网站运行时仍只需要 HTML、CSS、JavaScript、JSON 与图片；**Eleventy / Nunjucks 只在开发和发布构建时运行，不需要常驻后端**。
+多页面静态作品集。Eleventy / Nunjucks 在构建时生成 HTML；GitHub Actions 检查并发布 `dist/` 到 GitHub Pages，不需要常驻业务服务器。
 
-## 快速开始
+**Pages CMS 只管理作品。** 网站配图、个人照片、Logo 等也存于同一 GitHub 仓库，但不开放 CMS 内容或媒体入口。
+
+## 开发与远程查看
 
 需要 Node.js 22 或更新版本：
 
@@ -11,77 +13,71 @@ npm ci
 npm run dev
 ```
 
-默认预览为 `http://127.0.0.1:8001/`。修改模板、内容或资源后会自动重新构建 `dist/`，**浏览器目前仍需手动刷新**。构建失败会提示错误，并保留上一份构建成功的预览。
+预览为 `http://127.0.0.1:8001/`。保存模板、作品数据或图片会重新构建 `dist/`，浏览器目前手动刷新。失败时保留上次成功产物。
 
-### 在本机查看远程机器上的页面
-
-在你自己的电脑执行，用平时的 SSH 主机别名替换 `你的SSH主机`：
+在自己的电脑建立 SSH 隧道：
 
 ```bash
 ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:18001:127.0.0.1:8001 你的SSH主机
 ```
 
-保持连接，浏览器打开 `http://127.0.0.1:18001/`。VS Code Remote SSH 也可以在 Ports 面板转发远程 `8001` 并保持私有。
+打开 `http://127.0.0.1:18001/`。也可在 VS Code Remote SSH 的 Ports 面板转发 `8001`，保持私有。开发服务没有认证或生产防护，不直接暴露公网。
 
-默认只监听远程本机，不开放公网端口。可信内网／VPN 设备需要直连时，可显式启动：
-
-```bash
-npm run dev -- --host 0.0.0.0 --port 8001
-```
-
-通过远程可达 IP 访问，不是通过 `0.0.0.0`。开发服务没有登录、TLS 或生产防护，不应直接暴露公网。浏览器自动回归测试使用独立的 `18765` 端口。
-
-## 源码、内容与产物
+## 维护目录
 
 ```text
+.pages.yml                         仅作品 CMS 配置
+content/
+  artwork.json                     唯一作品数据源
+  legacy-missing-details.json       仅记录历史缺失细节图例外
+public/media/
+  artworks/                        作品展示图与细节图（CMS 唯一媒体库）
+  site/home/                       首页及背景配图（手工维护）
+  site/about/                      关于页照片（手工维护）
+  brand/                           Logo、favicon、社交图标（手工维护）
 src/
-  index.njk                   首页模板，输出 /
-  about/index.njk             关于页，输出 /about/
-  portfolios/index.njk        作品页，输出 /portfolios/
-  contact/index.njk           联系页，输出 /contact/
-  _includes/
-    layouts/base.njk          唯一 HTML 文档骨架
-    components/header.njk     四页共用导航与移动菜单
-    components/footer.njk     四页共用页脚
-    pages/*/head.njk          各页原有 head 资源顺序
-  assets/css/                 首轮提取的样式（内容未改）
-  assets/js/                  首轮提取的脚本（内容未改）
-content/artwork.json          唯一作品目录
-public/
-  image/                     展示图片，输出 URL 仍为 /image/
-  portfolios/                原作品页布局依赖与自定义 CSS
-  wp-content/、wp-includes/   过渡期保留原 URL 的 WordPress 前端资源
-  CNAME                      自定义域名文件
-scripts/                     预览、构建与发布契约检查
-legacy/                      旧样例；不直接复制到发布目录
-image_origin/                原图保留在仓库，但不进入 dist/
-tests/                       结构、DOM、行为与视觉回归
-docs/                        开发与部署说明
-dist/                        自动生成，不提交、不手改，只发布这里
+  index.njk、各页面目录              页面模板
+  _includes/layouts/base.njk        文档骨架
+  _includes/components/            共享导航、页脚
+  assets/css/                      页面与共享样式
+  assets/js/portfolio/
+    artwork-data.js                浏览器／构建共用数据与路径契约
+    gallery.js                     安全渲染、筛选和弹窗
+public/portfolios/                 原布局依赖与 mine_style.css
+public/wp-content/、wp-includes/   保留原位置的第三方依赖及导出样式
+scripts/                          构建、图片验证、CMS 校验、预览
+legacy/                           旧样例，不直接全部发布
+image_origin/                     原始素材，保持原样且不进 dist/
+tests/                            少量数据规则与核心操作测试
+docs/                             使用与发布说明
+dist/                             自动生成，不提交、不手改
 ```
 
-- `.njk` 仍以 HTML 为主，`{% include ... %}` 在构建时插入公共模板。
-- 公共导航用 `activeUrl` 和 `pageId` 保留每页原有选中态和属性，不在浏览器运行时拼导航。
-- `bodyAttributes` / `htmlAttributes` 保留旧页面属性。基础布局中的 `safe` 仅用于仓库维护者编写的标记，不用于作品表单输入。
-- 作品页交互：`src/assets/js/portfolio/gallery.js`。
-- 作品页自定义样式：`public/portfolios/mine_style.css`。
-- 新增作品：`content/artwork.json` 和 `public/image/`。数据字段与现有 52 条记录未改，尚未接入 CMS。
-- CSS/JS 本轮只迁移，不合并、不升级。`src/assets/` 的分块仍是保持历史顺序的过渡结构。
-- `/single_portfolio/` 旧详情 URL 暂保留：模板包含 `legacy/single_portfolio/index.html`，没有生成第二份维护源。
+### 图片路径
 
-### URL 映射
+- `public/media/artworks/...` 输出为 `/media/artworks/...`，作品 JSON 也记录这个根相对地址。
+- `public/media/site/...` 与 `public/media/brand/...` 使用同一存储和发布方式，不由 CMS 管理。
+- 图片已按原字节迁移，无压缩、裁切或缩略图生成。两张误标为 JPG 的 PNG 只修正扩展名和引用。
+- 站内 `src`、`srcset`、背景、图标、旧详情页引用已更新；旧图片站外直链不自动重定向。页面 URL 不变。
+- 插件附带图标留在第三方目录，原图不搬动、不删除、不改写 Git 历史。
+- 所有 public 资源都会公开。原图虽不进入 dist，公开 Git 历史中的文件仍非私密备份。
 
-`eleventy.config.cjs` 明确配置复制，不依赖目录名的隐式行为：
+见 [图片目录与 CMS 使用说明](docs/cms-and-media.md)。
 
-| 源文件 | 发布产物 |
-| --- | --- |
-| `src/about/index.njk` | `dist/about/index.html` |
-| `src/assets/` | `dist/assets/` |
-| `content/artwork.json` | `dist/artwork.json` |
-| `public/image/` | `dist/image/` |
-| `public/wp-content/` | `dist/wp-content/` |
+## Pages CMS 接入与使用
 
-所以访客的原 URL 和脚本里的相对请求不变。`src/`、`public/`、`content/` 不成为 URL 前缀。每份内容只有一个维护来源，根目录不再保留生成后的四个 HTML 或作品 JSON。
+`.pages.yml` 只暴露：
+
+- `content/artwork.json` 的作品数组及全部八个字段。
+- `public/media/artworks/` 图片库，JPEG／PNG／WebP，随机新文件名。
+
+合并代码后，由仓库所有者到 [app.pagescms.org](https://app.pagescms.org) 登录 GitHub，审查 GitHub App 权限，仅授权这个仓库。先在非发布分支完成真实上传、保存、回读测试，再使用 main。**配置和本地测试完成不等于托管 CMS 授权已完成。**
+
+作品字段填好并保存后，CMS 创建 GitHub 提交；main 更新触发现有 Actions。保存成功不是上线成功，要看同一提交的 `check` / `deploy`。只上传图片不自动生成作品记录。若需要审核，在编辑分支保存后用 PR 合入 main。
+
+分类文字、引号和 HTML 字符按普通数据处理；不会把作品输入作为 HTML 执行。图片路径只接受作品目录，发布前检查真实格式、完整解码、**5 MiB / 2400 万像素 / 单边 8000 像素**上限。不自动压缩，上传前请自行导出适合网页的展示图。
+
+`des`、`detail` 保留资料，但当前公开弹窗尚未展示作品说明或细节图。已有 12 个缺失细节路径明确登记为例外，新增缺图会失败。
 
 ## 构建和预览产物
 
@@ -90,57 +86,36 @@ npm run build
 npm run preview
 ```
 
-`build` 先验证作品字段和主图，在独立临时目录生成站点，核对发布文件清单后替换 `dist/`。模板错误或校验失败不覆盖当前成功产物。发布清单排除原图、源码、测试、文档、配置和 Node 依赖；过渡期第三方目录仍完整复制。
+构建先校验 CMS 配置、数据与图片，在临时目录生成并核对产物清单，成功后替换 `dist/`。只发布 HTML、JSON、公开媒体与运行资源，不发布 `.pages.yml`、素材原图、源码、测试、文档或依赖。
 
-`preview` 只查看已有产物，不监听源码；`dev` 会先构建、监听改动并重建。不要直接用 `file://` 打开模板或作品页。`dist/` 不应手改，更不能仅把 `.njk` 上传到静态托管平台就期待它自动执行。
+`preview` 只查看已有产物；`dev` 同时监听保存。不要直接用 `file://` 打开作品页，也不要手动编辑 dist。
 
-## 验证
-
-第一次运行浏览测试需安装固定浏览器：
+## 测试：少而稳定，不冻结内容
 
 ```bash
-npx playwright install chromium
-npm run check
+npm test                 # 快速数据／安全规则检查
+npm run test:browser     # 桌面与手机核心操作
+npm run check            # 构建 + 上述两类检查
 ```
 
-`check` 会按顺序构建，然后执行：
+第一次运行浏览测试需 `npx playwright install chromium`。
 
-- `test:dev-server`：3 项开发服务检查。
-- `test:structure`：15 项结构、内容、资源字节、产物边界与旧版提取约束检查。
-- `test:build`：在隔离副本验证重复构建、旧产物清理、失败保护与保存自动重建。
-- `npm test`：37 项浏览测试，包含页面功能、资源、四页完整 DOM 对照与 22 张旧版截图。
+保留的检查只覆盖容易造成真实故障的契约：数据可增删改且允许空列表、非法路径／损坏图片被拒绝、筛选有效、弹窗对应选中作品、手机菜单可跳转，以及普通文字不执行 HTML。
 
-单独检查：
+测试不保存当前作品名单、数量、顺序、年份、分类、文案或图片哈希。业务测试从当前目录取样；异常输入用少量虚构数据，不依赖网站内容。改标题、加作品、换图、新增分类或调整排版无需更新测试。只有有意改变数据规则或核心功能行为时，才需要更新对应测试。
+
+历史 DOM／像素快照、迁移字节证明、分类／断点穷举和反复复制整站构建的测试已移除。既有重构证明可从 Git 历史或旧 PR 查阅，不作为长期发布门槛。样式调整用预览人工确认，不要求维护整页截图基线。
+
+失败时查看报告：
 
 ```bash
-npm run test:browser
-npm run test:visual
 npx playwright show-report --host 127.0.0.1 --port 9323
 ```
 
-`test:browser` 不含像素测试，适合 CI 的不同系统字体。完整 `npm test` 依然严格比较 22 张旧版截图，容差为零。基准使用 Linux / Chromium 159.0.8154.6，详情在 `tests/fixtures/visual-baseline.json`。外部字体、统计被一致隔离；不代表其他浏览器、真实手机和外部服务都已验证。
+## Actions 与发布
 
-不得为让检查通过而直接重建截图。模板重排允许格式化空白变化，但实际浏览器解析的元素、属性和文字必须与第一轮提交 `21761d5` 一致，JS/CSS 字节仍和原提交一致。
+`.github/workflows/site.yml` 继续按 main 变动构建、检查并发布。原站已切换到 Actions 并完成过首次部署；本轮不修改平台设置。部署仍受原仓库／main／非 PR／`ENABLE_PAGES_DEPLOY=true` 条件保护。
 
-迁移检查读取原站旧提交 `6846f0f`，完整克隆或 CI `fetch-depth: 0` 才能运行。第一轮 `21761d5` 的 DOM 已保存为 `tests/fixtures/template-dom.json`，因此第一轮即使被 squash 合并，也不需要保留该中间提交才能验收。这些是迁移约束，不是永远禁止修改内容；未来有意变更应明确调整对应断言。
+CI 使用相同的轻量流程：构建时校验当前内容，运行快速规则测试，再做核心桌面／手机冒烟检查。没有历史 DOM／像素冻结或旧提交依赖。检查失败不发布，上一版正式站保留。
 
-## CI 与 GitHub Pages
-
-`.github/workflows/site.yml` 对 PR 构建、检查内容和 DOM／功能，保存可下载的 `static-site` 与测试报告。CI 不自动重建本地截图基线。
-
-部署默认关闭：需要原仓库维护者把 Pages 发布源设为 **GitHub Actions**，并设置仓库变量 `ENABLE_PAGES_DEPLOY=true`。这样只有原仓库的 `main` 才能部署，PR 和 fork 不会发布。部署上传的是同一份已验证 `dist/`，不二次构建。
-
-**不要在仍从 `main` 根目录直接发布时，单独合并模板迁移。** 根目录不再是可直接发布的网站；管理员应按 [发布切换说明](docs/deployment.md)协调合并与发布源切换，避免旧发布流程把源码当站点发出。
-
-本轮没有更改线上 Pages 设置、合并 PR 或发布正式站点。
-
-## 已知问题与刻意保留
-
-- 原库仍有重复第三方加载、两套 jQuery 和重复 `lazyloadRunObserver` 声明；运行测试显式登记这个旧异常，拒绝新增错误。
-- 原本失效的本机字体地址、12 个可选细节图缺失引用仍保留并提示，未偷偷改动外观或作品数据。
-- 元素 `style` 属性和 JSON `speculationrules` 保留；它们不等同于普通内联脚本。
-- 原图未删除、未重写 Git 历史。排除部署不会使公开仓库或历史里的原图变成私密文件。
-- 旧样例归入 `legacy/`，除显式保留的详情 URL 外不发布。
-- 不在此轮引入 CMS、升级依赖或按新风格重写作品交互。
-
-更完整说明：[远程预览与源码结构](docs/preview-and-structure.md)、[发布切换](docs/deployment.md)。
+详见 [部署说明](docs/deployment.md)、[预览与源码结构](docs/preview-and-structure.md)、[CMS 与图片](docs/cms-and-media.md)。

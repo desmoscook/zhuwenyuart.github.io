@@ -1,0 +1,58 @@
+# CMS 只管理作品；网站配图与品牌图片仍存 Git，不在 CMS 中开放。
+media:
+  - name: artworks
+    label: 作品图片
+    input: public/media/artworks
+    output: /media/artworks
+    extensions: [jpg, jpeg, png, webp]
+    rename: random
+
+content:
+  - name: artworks
+    label: 作品管理
+    type: file
+    path: content/artwork.json
+    format: json
+    list: true
+    fields:
+      - name: name
+        label: 作品名称
+        type: string
+        required: true
+      - name: path
+        label: 作品图片
+        type: image
+        required: true
+        options:
+          media: artworks
+      - name: time
+        label: 创作年份
+        type: string
+        required: true
+        pattern:
+          regex: '^[0-9]{4}$'
+          message: 请输入四位年份，例如 2026
+      - name: category
+        label: 所属系列
+        type: string
+        required: true
+        description: 沿用已有系列名称可避免误建分类，也可以填写新系列。
+      - name: material
+        label: 材料
+        type: string
+        required: true
+      - name: size
+        label: 尺寸
+        type: string
+        required: true
+      - name: des
+        label: 作品说明
+        type: text
+        description: 保存文字资料，当前公开弹窗尚未展示说明。
+      - name: detail
+        label: 细节图片
+        type: image
+        list: true
+        options:
+          media: artworks
+        description: 只上传作品细节；当前公开弹窗尚未展示细节图。
