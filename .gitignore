@@ -1,6 +1,9 @@
-node_modules/
-test-results/
-playwright-report/
-.playwright-cli/
-.archify/
+/node_modules/
+/dist/
+/.cache/
+/.build-*/
+/test-results/
+/playwright-report/
+/.playwright-cli/
+/.archify/
 .DS_Store

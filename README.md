@@ -1,128 +1,146 @@
 # 朱文语艺术作品网站
 
-这个仓库直接发布静态 HTML、CSS、JavaScript、JSON 与图片。第一轮重构不引入框架、构建系统、CMS 或后端；页面仍可由 GitHub Pages 或普通静态服务器提供。
+多页面静态作品集。网站运行时仍只需要 HTML、CSS、JavaScript、JSON 与图片；**Eleventy / Nunjucks 只在开发和发布构建时运行，不需要常驻后端**。
 
-## 第一轮目录
+## 快速开始
 
-```text
-index.html                    首页
-about/index.html              关于艺术家
-contact/index.html            联系方式
-portfolios/index.html         作品集
-artwork.json                  作品数据（本轮未改）
-image/                        展示图（本轮未改）
-assets/
-  css/shared/                 多页间内容完全相同的原内联样式
-  css/contact/                联系页原内联样式
-  css/portfolio/              作品页原内联样式
-  js/shared/                  多页间内容完全相同的原内联脚本
-  js/home/                    首页配置
-  js/about/                   关于页配置
-  js/contact/                 联系页配置及脚本
-  js/portfolio/               作品页配置及 gallery.js
-portfolios/mine_style.css     原有作品页自定义样式（未改）
-wp-content/、wp-includes/      原有主题与插件资源（未改）
-scripts/                      手动预览等开发脚本
-docs/                         预览说明与后续目录规划
-tests/                        结构、功能、资源与视觉回归检查
-```
-
-文件较细是本轮刻意的过渡方案：**将原有代码块在原来的位置替换为引用，不合并或重排它们**。这能保留 CSS 层叠和脚本执行顺序。相同内容的代码块共用文件；只在空白或配置上不同的版本暂时不强行合并。后续小重构可在同一套回归检查下进一步规范共享模块。
-
-### 修改入口
-
-- 作品筛选、渲染和弹窗：`assets/js/portfolio/gallery.js`。
-- 作品集自定义外观：`portfolios/mine_style.css`。
-- 公共／页面导出样式：`assets/css/` 下对应文件。注意 HTML 中的引用顺序。
-- 页面正文：对应 `index.html`。
-- 新增作品：`artwork.json` 与 `image/`；本轮尚未接入管理界面。
-
-## 本轮保留的内容
-
-- 元素 `style="..."` 属性保留。它们的优先级不同于样式表，不做机械转换。
-- `script[type="speculationrules"]` 保留。这是浏览器使用的 JSON 预取配置，不是可执行 JavaScript。
-- 原有第三方脚本顺序、版本、重复引用和原有 ID 保留。
-- 作品页仍有历史重复 `lazyloadRunObserver` 声明报错。它在旧版中就存在，本轮仅外置代码；资源测试明确记录该已知错误，并拒绝新增错误。
-- 失效字体地址、原有缺失细节图、模板占位文案以及旧详情页不在本轮修复范围。
-- `single_portfolio/` 和 `portfolios/body_old.html` 未迁移；本轮范围为四个主要页面。
-
-## 本地与跨机器预览
-
-在远程仓库目录运行（只需要 Node，无额外服务依赖）：
+需要 Node.js 22 或更新版本：
 
 ```bash
+npm ci
 npm run dev
 ```
 
-默认提供 `http://127.0.0.1:8001/`。浏览器刷新即可读取源码修改，当前没有自动刷新。默认只监听远程机器本机，不直接暴露公网。
+默认预览为 `http://127.0.0.1:8001/`。修改模板、内容或资源后会自动重新构建 `dist/`，**浏览器目前仍需手动刷新**。构建失败会提示错误，并保留上一份构建成功的预览。
 
-### 从你自己的电脑访问远程预览
+### 在本机查看远程机器上的页面
 
-在**你自己的电脑**另开终端，用平时的 SSH 主机名或别名替换 `你的SSH主机`：
+在你自己的电脑执行，用平时的 SSH 主机别名替换 `你的SSH主机`：
 
 ```bash
 ssh -N -o ExitOnForwardFailure=yes -L 127.0.0.1:18001:127.0.0.1:8001 你的SSH主机
 ```
 
-保持该终端连接，在自己电脑浏览器打开 `http://127.0.0.1:18001/`。这里两个 `127.0.0.1` 分别指本机和远程机器；隧道把浏览器请求转发给远程的 `8001`。
+保持连接，浏览器打开 `http://127.0.0.1:18001/`。VS Code Remote SSH 也可以在 Ports 面板转发远程 `8001` 并保持私有。
 
-如果用 VS Code Remote SSH，也可以在 Ports 面板转发远程 `8001`，保持端口私有。仅在可信局域网／VPN 中需要直连时，才显式启动：
+默认只监听远程本机，不开放公网端口。可信内网／VPN 设备需要直连时，可显式启动：
 
 ```bash
 npm run dev -- --host 0.0.0.0 --port 8001
 ```
 
-然后用远程主机的可达 IP 加 `:8001` 访问。`0.0.0.0` 是监听地址，不是浏览器地址。它没有登录保护；不要直接开放到公网，也不要为此关闭防火墙。端口连通性还取决于网络、VPN、安全组和防火墙。
+通过远程可达 IP 访问，不是通过 `0.0.0.0`。开发服务没有登录、TLS 或生产防护，不应直接暴露公网。浏览器自动回归测试使用独立的 `18765` 端口。
 
-预览服务器不列目录，拒绝 `.git`、开发文件、测试目录、原图目录及指向仓库外的符号链接，但仍只是开发工具，不是生产 Web 服务器。自动化浏览测试继续使用独立的 `18765` 端口，不与手动预览冲突。
+## 源码、内容与产物
 
-不要直接用 `file://` 打开作品页，浏览器通常会限制它的 JSON 请求。完整说明见 [远程预览与目录规划](docs/preview-and-structure.md)。
+```text
+src/
+  index.njk                   首页模板，输出 /
+  about/index.njk             关于页，输出 /about/
+  portfolios/index.njk        作品页，输出 /portfolios/
+  contact/index.njk           联系页，输出 /contact/
+  _includes/
+    layouts/base.njk          唯一 HTML 文档骨架
+    components/header.njk     四页共用导航与移动菜单
+    components/footer.njk     四页共用页脚
+    pages/*/head.njk          各页原有 head 资源顺序
+  assets/css/                 首轮提取的样式（内容未改）
+  assets/js/                  首轮提取的脚本（内容未改）
+content/artwork.json          唯一作品目录
+public/
+  image/                     展示图片，输出 URL 仍为 /image/
+  portfolios/                原作品页布局依赖与自定义 CSS
+  wp-content/、wp-includes/   过渡期保留原 URL 的 WordPress 前端资源
+  CNAME                      自定义域名文件
+scripts/                     预览、构建与发布契约检查
+legacy/                      旧样例；不直接复制到发布目录
+image_origin/                原图保留在仓库，但不进入 dist/
+tests/                       结构、DOM、行为与视觉回归
+docs/                        开发与部署说明
+dist/                        自动生成，不提交、不手改，只发布这里
+```
 
-## 后续目录规划
+- `.njk` 仍以 HTML 为主，`{% include ... %}` 在构建时插入公共模板。
+- 公共导航用 `activeUrl` 和 `pageId` 保留每页原有选中态和属性，不在浏览器运行时拼导航。
+- `bodyAttributes` / `htmlAttributes` 保留旧页面属性。基础布局中的 `safe` 仅用于仓库维护者编写的标记，不用于作品表单输入。
+- 作品页交互：`src/assets/js/portfolio/gallery.js`。
+- 作品页自定义样式：`public/portfolios/mine_style.css`。
+- 新增作品：`content/artwork.json` 和 `public/image/`。数据字段与现有 52 条记录未改，尚未接入 CMS。
+- CSS/JS 本轮只迁移，不合并、不升级。`src/assets/` 的分块仍是保持历史顺序的过渡结构。
+- `/single_portfolio/` 旧详情 URL 暂保留：模板包含 `legacy/single_portfolio/index.html`，没有生成第二份维护源。
 
-当前目录是首轮“原样拆出内联代码”的过渡结构，不是最终规范。建议下一轮向轻量静态站结构整理：`src/` 存页面／布局／浏览代码，`content/` 存内容，`public/` 存明确可公开的原样复制资源，`scripts/` 存开发工具，`tests/` 存测试，`dist/` 仅存构建产物。
+### URL 映射
 
-具体目标与迁移顺序见 [远程预览与目录规划](docs/preview-and-structure.md)。该结构尚未迁移，也没有引入 Eleventy 或改变 Pages 发布源。
+`eleventy.config.cjs` 明确配置复制，不依赖目录名的隐式行为：
 
-## 回归测试
+| 源文件 | 发布产物 |
+| --- | --- |
+| `src/about/index.njk` | `dist/about/index.html` |
+| `src/assets/` | `dist/assets/` |
+| `content/artwork.json` | `dist/artwork.json` |
+| `public/image/` | `dist/image/` |
+| `public/wp-content/` | `dist/wp-content/` |
 
-Node 依赖只用于开发测试，不是网站运行依赖：
+所以访客的原 URL 和脚本里的相对请求不变。`src/`、`public/`、`content/` 不成为 URL 前缀。每份内容只有一个维护来源，根目录不再保留生成后的四个 HTML 或作品 JSON。
+
+## 构建和预览产物
 
 ```bash
-npm ci
+npm run build
+npm run preview
+```
+
+`build` 先验证作品字段和主图，在独立临时目录生成站点，核对发布文件清单后替换 `dist/`。模板错误或校验失败不覆盖当前成功产物。发布清单排除原图、源码、测试、文档、配置和 Node 依赖；过渡期第三方目录仍完整复制。
+
+`preview` 只查看已有产物，不监听源码；`dev` 会先构建、监听改动并重建。不要直接用 `file://` 打开模板或作品页。`dist/` 不应手改，更不能仅把 `.njk` 上传到静态托管平台就期待它自动执行。
+
+## 验证
+
+第一次运行浏览测试需安装固定浏览器：
+
+```bash
 npx playwright install chromium
-npm run test:dev-server
-npm run test:structure
-npm test
+npm run check
 ```
 
-- **结构检查**：四页各一个 `body`，无 `<style>` 与可执行内联脚本；提取代码与旧提交逐字节相同；原正文、属性、外部依赖和引用顺序不变。
-- **功能测试**：导航、全部系列／年份、手机下拉筛选、弹窗三种关闭方式、响应式断点。
-- **资源测试**：新增资源全部加载成功；没有新增运行时脚本错误。
-- **视觉测试**：22 张从旧版本建立的基准图，固定环境下零像素差异。包含四页桌面／手机、内部滚动末尾、菜单、筛选与弹窗、断点。
+`check` 会按顺序构建，然后执行：
 
-可以只运行截图检查：
+- `test:dev-server`：3 项开发服务检查。
+- `test:structure`：15 项结构、内容、资源字节、产物边界与旧版提取约束检查。
+- `test:build`：在隔离副本验证重复构建、旧产物清理、失败保护与保存自动重建。
+- `npm test`：37 项浏览测试，包含页面功能、资源、四页完整 DOM 对照与 22 张旧版截图。
+
+单独检查：
 
 ```bash
+npm run test:browser
 npm run test:visual
+npx playwright show-report --host 127.0.0.1 --port 9323
 ```
 
-失败时打开本地测试报告：
+`test:browser` 不含像素测试，适合 CI 的不同系统字体。完整 `npm test` 依然严格比较 22 张旧版截图，容差为零。基准使用 Linux / Chromium 159.0.8154.6，详情在 `tests/fixtures/visual-baseline.json`。外部字体、统计被一致隔离；不代表其他浏览器、真实手机和外部服务都已验证。
 
-```bash
-npx playwright show-report
-```
+不得为让检查通过而直接重建截图。模板重排允许格式化空白变化，但实际浏览器解析的元素、属性和文字必须与第一轮提交 `21761d5` 一致，JS/CSS 字节仍和原提交一致。
 
-### 基线环境与限制
+迁移检查读取原站旧提交 `6846f0f`，完整克隆或 CI `fetch-depth: 0` 才能运行。第一轮 `21761d5` 的 DOM 已保存为 `tests/fixtures/template-dom.json`，因此第一轮即使被 squash 合并，也不需要保留该中间提交才能验收。这些是迁移约束，不是永远禁止修改内容；未来有意变更应明确调整对应断言。
 
-基线详情在 `tests/fixtures/visual-baseline.json`。使用 Playwright 1.65.1 对应的 Chromium 159.0.8154.6，Linux，固定视口和系统字体。所有外部请求被一致阻断，所以**外部字体服务、统计服务、真实手机和其他浏览器并未获得等价性认证**。测试中也关闭了 WordPress 的 emoji Worker，避免不相关的动态网络活动；未修改网站本身的 emoji 逻辑。
+## CI 与 GitHub Pages
 
-不要为了让失败通过而直接更新截图。先判断差异是环境噪声、缺陷，还是明确批准的视觉改动。只有最后一种情形才重建对应基准，并审核差异。
+`.github/workflows/site.yml` 对 PR 构建、检查内容和 DOM／功能，保存可下载的 `static-site` 与测试报告。CI 不自动重建本地截图基线。
 
-结构测试中的迁移检查会读取旧提交 `6846f0f`。在完整 Git 克隆中运行；浅克隆缺少该提交时需先取回历史。这是第一轮重构的临时等价性约束，未来有意修改页面内容或交互时，应明确调整／退役对应迁移检查，不要伪造旧版哈希。
+部署默认关闭：需要原仓库维护者把 Pages 发布源设为 **GitHub Actions**，并设置仓库变量 `ENABLE_PAGES_DEPLOY=true`。这样只有原仓库的 `main` 才能部署，PR 和 fork 不会发布。部署上传的是同一份已验证 `dist/`，不二次构建。
 
-## 发布
+**不要在仍从 `main` 根目录直接发布时，单独合并模板迁移。** 根目录不再是可直接发布的网站；管理员应按 [发布切换说明](docs/deployment.md)协调合并与发布源切换，避免旧发布流程把源码当站点发出。
 
-当前仍保留原静态目录和原有 Pages 配置，没有新增自动部署工作流，也没有推送或发布。`package.json` 不会自动让 GitHub Pages 执行测试；若要把测试变成上线门禁，应在下一轮单独增加 CI／限定发布目录。
+本轮没有更改线上 Pages 设置、合并 PR 或发布正式站点。
 
-原图、测试截图和开发文件是否被发布取决于现有 Pages 配置。公开仓库里的文件也不因为未出现在导航中而保密。调整发布目录与原图治理应单独进行，避免与本轮无外观差异重构混在一起。
+## 已知问题与刻意保留
+
+- 原库仍有重复第三方加载、两套 jQuery 和重复 `lazyloadRunObserver` 声明；运行测试显式登记这个旧异常，拒绝新增错误。
+- 原本失效的本机字体地址、12 个可选细节图缺失引用仍保留并提示，未偷偷改动外观或作品数据。
+- 元素 `style` 属性和 JSON `speculationrules` 保留；它们不等同于普通内联脚本。
+- 原图未删除、未重写 Git 历史。排除部署不会使公开仓库或历史里的原图变成私密文件。
+- 旧样例归入 `legacy/`，除显式保留的详情 URL 外不发布。
+- 不在此轮引入 CMS、升级依赖或按新风格重写作品交互。
+
+更完整说明：[远程预览与源码结构](docs/preview-and-structure.md)、[发布切换](docs/deployment.md)。
