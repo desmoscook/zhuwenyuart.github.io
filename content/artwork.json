@@ -1,33 +1,30 @@
 [
   {
-    "path": "/media/artworks/2021/玻璃器皿.jpg",
     "name": "玻璃器皿",
+    "path": "/media/artworks/2021/玻璃器皿.jpg",
     "time": "2021",
     "category": "单幅创作",
     "material": "布面油画",
     "size": "60x80cm",
-    "des": "",
     "detail": [
       "/media/artworks/2021/玻璃器皿 细节.jpg"
     ]
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (1).jpg",
     "name": "情绪系列 (1)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (1).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2021/沉睡的山峦.jpg",
     "name": "沉睡的山峦",
+    "path": "/media/artworks/2021/沉睡的山峦.jpg",
     "time": "2021",
     "category": "单幅创作",
     "material": "布面油画",
     "size": "150x120cm",
-    "des": "",
     "detail": [
       "/media/artworks/2021/沉睡的山峦 细节1.jpg",
       "/media/artworks/2021/沉睡的山峦 细节2.jpg",
@@ -36,25 +33,23 @@
     ]
   },
   {
-    "path": "/media/artworks/2021/花与女人.jpg",
     "name": "花与女人",
+    "path": "/media/artworks/2021/花与女人.jpg",
     "time": "2021",
+    "category": "单幅创作",
     "material": "纸本色粉",
     "size": "78x110cm",
-    "category": "单幅创作",
-    "des": "",
     "detail": [
       "/media/artworks/2021/花与女人 细节.jpg"
     ]
   },
   {
-    "path": "/media/artworks/2022/雕塑小马.jpg",
     "name": "雕塑小马",
+    "path": "/media/artworks/2022/雕塑小马.jpg",
     "time": "2022",
+    "category": "单幅创作",
     "material": "布面油画",
     "size": "60x80cm",
-    "category": "单幅创作",
-    "des": "",
     "detail": [
       "/media/artworks/2022/雕塑小马 细节1.jpg",
       "/media/artworks/2022/雕塑小马 细节2.jpg",
@@ -62,433 +57,395 @@
     ]
   },
   {
-    "path": "/media/artworks/2022/玛雅.jpg",
     "name": "玛雅",
+    "path": "/media/artworks/2022/玛雅.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "50x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "50x60cm"
   },
   {
-    "path": "/media/artworks/2022/玛雅 2.jpg",
     "name": "玛雅2",
+    "path": "/media/artworks/2022/玛雅 2.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "50x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "50x60cm"
   },
   {
-    "path": "/media/artworks/2022/你能看见吗.jpg",
     "name": "你能看见吗",
+    "path": "/media/artworks/2022/你能看见吗.jpg",
+    "time": "2022",
+    "category": "单幅创作",
     "material": "布面油画",
     "size": "110x140cm",
-    "time": "2022",
-    "category": "单幅创作",
-    "des": "",
     "detail": [
       "/media/artworks/2022/你能看见吗 细节1.jpg",
       "/media/artworks/2022/你能看见吗 细节2.jpg"
     ]
   },
   {
-    "path": "/media/artworks/2022/女 单人体.jpg",
     "name": "女 单人体",
+    "path": "/media/artworks/2022/女 单人体.jpg",
     "time": "2023",
-    "material": "布面油画",
-    "size": "110x140cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "110x140cm"
   },
   {
-    "path": "/media/artworks/2022/女 双人体.jpg",
     "name": "女 双人体",
+    "path": "/media/artworks/2022/女 双人体.jpg",
     "time": "2023",
-    "material": "布面油画",
-    "size": "80x115cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "80x115cm"
   },
   {
-    "path": "/media/artworks/2022/七宗罪 (1).jpg",
     "name": "七宗罪 (1)",
+    "path": "/media/artworks/2022/七宗罪 (1).jpg",
     "time": "2022",
-    "material": "木板油画",
-    "size": "20x30cm",
     "category": "七宗罪",
-    "des": ""
+    "material": "木板油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2022/七宗罪 (2).jpg",
     "name": "七宗罪 (2)",
+    "path": "/media/artworks/2022/七宗罪 (2).jpg",
     "time": "2022",
-    "material": "木板油画",
-    "size": "20x30cm",
     "category": "七宗罪",
-    "des": ""
+    "material": "木板油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2022/七宗罪 (3).jpg",
     "name": "七宗罪 (3)",
+    "path": "/media/artworks/2022/七宗罪 (3).jpg",
     "time": "2022",
-    "material": "木板油画",
-    "size": "20x20cm",
     "category": "七宗罪",
-    "des": ""
+    "material": "木板油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2022/七宗罪 (4).jpg",
     "name": "七宗罪 (4)",
+    "path": "/media/artworks/2022/七宗罪 (4).jpg",
     "time": "2022",
-    "material": "木板油画",
-    "size": "20x20cm",
     "category": "七宗罪",
-    "des": ""
+    "material": "木板油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2022/视而不见.jpg",
     "name": "视而不见",
+    "path": "/media/artworks/2022/视而不见.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "80x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "80x60cm"
   },
   {
-    "path": "/media/artworks/2022/西湖黄昏.jpg",
     "name": "西湖黄昏",
+    "path": "/media/artworks/2022/西湖黄昏.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "120x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "120x60cm"
   },
   {
-    "path": "/media/artworks/2022/遗迹.jpg",
     "name": "遗迹",
+    "path": "/media/artworks/2022/遗迹.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "120x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "120x60cm"
   },
   {
-    "path": "/media/artworks/2022/拥抱.jpg",
     "name": "拥抱",
+    "path": "/media/artworks/2022/拥抱.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "50x50cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "50x50cm"
   },
   {
-    "path": "/media/artworks/2023/蓝色.jpg",
     "name": "蓝色",
+    "path": "/media/artworks/2023/蓝色.jpg",
     "time": "2022",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2023/蓝色的海.jpg",
     "name": "蓝色的海",
+    "path": "/media/artworks/2023/蓝色的海.jpg",
     "time": "2023",
-    "material": "布面油画",
-    "size": "80x40cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "80x40cm"
   },
   {
-    "path": "/media/artworks/2023/一切坚固的东西都烟消云散了.jpg",
     "name": "一切坚固的东西都烟消云散了",
+    "path": "/media/artworks/2023/一切坚固的东西都烟消云散了.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "280x200cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "280x200cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (1).jpg",
     "name": "光的十二重奏 (1)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (1).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (2).jpg",
     "name": "光的十二重奏 (2)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (2).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (3).jpg",
     "name": "光的十二重奏 (3)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (3).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (4).jpg",
     "name": "光的十二重奏 (4)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (4).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (5).jpg",
     "name": "光的十二重奏 (5)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (5).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (6).jpg",
     "name": "光的十二重奏 (6)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (6).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (7).jpg",
     "name": "光的十二重奏 (7)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (7).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (8).jpg",
     "name": "光的十二重奏 (8)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (8).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (9).jpg",
     "name": "光的十二重奏 (9)",
+    "path": "/media/artworks/2024/光的十二重奏/光的十二重奏 (9).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "光的十二重奏",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/海洋_扎染/复刻的蓝.jpg",
     "name": "复刻的蓝",
+    "path": "/media/artworks/2024/海洋_扎染/复刻的蓝.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "海洋_扎染",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/海洋_扎染/光的折射.jpg",
     "name": "光的折射",
+    "path": "/media/artworks/2024/海洋_扎染/光的折射.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "15x15cm",
     "category": "海洋_扎染",
-    "des": ""
+    "material": "布面油画",
+    "size": "15x15cm"
   },
   {
-    "path": "/media/artworks/2024/海洋_扎染/海浪.jpg",
     "name": "海浪",
+    "path": "/media/artworks/2024/海洋_扎染/海浪.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "30x30cm",
     "category": "海洋_扎染",
-    "des": ""
+    "material": "布面油画",
+    "size": "30x30cm"
   },
   {
-    "path": "/media/artworks/2024/海洋_扎染/蔚蓝的海.jpg",
     "name": "蔚蓝的海",
+    "path": "/media/artworks/2024/海洋_扎染/蔚蓝的海.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "30x30cm",
     "category": "海洋_扎染",
-    "des": ""
+    "material": "布面油画",
+    "size": "30x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (2).jpg",
     "name": "情绪系列 (2)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (2).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (3).jpg",
     "name": "情绪系列 (3)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (3).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (4).jpg",
     "name": "情绪系列 (4)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (4).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (5).jpg",
     "name": "情绪系列 (5)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (5).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (6).jpg",
     "name": "情绪系列 (6)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (6).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (7).jpg",
     "name": "情绪系列 (7)",
+    "path": "/media/artworks/2024/色彩空间_工作坊/情绪系列 (7).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (1).jpg",
     "name": "情绪人物系列 (1)",
+    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (1).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "情绪人物系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (2).jpg",
     "name": "情绪人物系列 (2)",
+    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (2).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "情绪人物系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (3).jpg",
     "name": "情绪人物系列 (3)",
+    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (3).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "30x30cm",
     "category": "情绪人物系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "30x30cm"
   },
   {
-    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (4).jpg",
     "name": "情绪人物系列 (4)",
+    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (4).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "情绪人物系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (5).jpg",
     "name": "情绪人物系列 (5)",
+    "path": "/media/artworks/2024/色彩情绪人物/情绪人物系列 (5).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "情绪人物系列",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2024/游乐园/游乐园 (1).jpg",
     "name": "游乐园 (1)",
+    "path": "/media/artworks/2024/游乐园/游乐园 (1).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "30x40cm",
     "category": "游乐园",
-    "des": ""
+    "material": "布面油画",
+    "size": "30x40cm"
   },
   {
-    "path": "/media/artworks/2024/游乐园/游乐园 (2).jpg",
     "name": "游乐园 (2)",
+    "path": "/media/artworks/2024/游乐园/游乐园 (2).jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "30x40cm",
     "category": "游乐园",
-    "des": ""
+    "material": "布面油画",
+    "size": "30x40cm"
   },
   {
-    "path": "/media/artworks/2024/游船.jpg",
     "name": "游船",
+    "path": "/media/artworks/2024/游船.jpg",
     "time": "2024",
-    "material": "布面油画",
-    "size": "20x30cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x30cm"
   },
   {
-    "path": "/media/artworks/2025/瞳孔/瞳孔 (1).png",
     "name": "瞳孔 (1)",
+    "path": "/media/artworks/2025/瞳孔/瞳孔 (1).png",
     "time": "2025",
-    "material": "布面油画",
-    "size": "20x20cm",
     "category": "瞳孔",
-    "des": ""
+    "material": "布面油画",
+    "size": "20x20cm"
   },
   {
-    "path": "/media/artworks/2025/瞳孔/瞳孔 (2).png",
     "name": "瞳孔 (2)",
+    "path": "/media/artworks/2025/瞳孔/瞳孔 (2).png",
     "time": "2025",
+    "category": "瞳孔",
     "material": "布面油画",
     "size": "20x20cm",
-    "category": "瞳孔",
-    "des": "",
     "detail": [
       "/media/artworks/2025/瞳孔/瞳孔 (2) 细节.jpg"
     ]
   },
   {
-    "path": "/media/artworks/2025/萤火.jpg",
     "name": "萤火",
+    "path": "/media/artworks/2025/萤火.jpg",
     "time": "2025",
-    "material": "布面油画",
-    "size": "50x60cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "50x60cm"
   },
   {
-    "path": "/media/artworks/2025/神秘的雨林.jpg",
     "name": "神秘的雨林",
+    "path": "/media/artworks/2025/神秘的雨林.jpg",
     "time": "2025",
-    "material": "布面油画",
-    "size": "150x150cm",
     "category": "单幅创作",
-    "des": ""
+    "material": "布面油画",
+    "size": "150x150cm"
+  },
+  {
+    "name": "实习生",
+    "path": "/media/artworks/mww9bavk-yagch0xg.jpg",
+    "time": "2026",
+    "category": "无",
+    "material": "电子",
+    "size": "100x100",
+    "des": "测试"
   }
 ]
